@@ -1,0 +1,25 @@
+{
+  // Python 解释器路径
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  
+  // Python 格式化配置
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false
+  },
+  
+  // Black 格式化器配置
+  "black-formatter.args": [
+    "--line-length=88"
+  ],
+  
+  // 可选：如果想使用 autopep8 替代 black，取消下面注释并注释掉上面的 black 配置
+  // "[python]": {
+  //   "editor.defaultFormatter": "ms-python.autopep8",
+  //   "editor.formatOnSave": true
+  // },
+  
+  // Python 语言服务器设置
+  "python.analysis.typeCheckingMode": "basic"
+}
