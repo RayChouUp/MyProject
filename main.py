@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, status, HTTPException, Header, Query, Request
 from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
-from typing import Annotated
+from typing import Annotated, TypeAlias
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pathlib import Path as SysPath
 from pydantic import BaseModel, EmailStr
@@ -82,7 +82,7 @@ def get_session():
         yield session
 
 
-SessionDep = Annotated[Session, Depends(get_session)]
+SessionDep: TypeAlias = Annotated[Session, Depends(get_session)]
 
 
 @app.on_event("startup")
