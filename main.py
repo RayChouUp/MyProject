@@ -11,7 +11,7 @@ import time
 from jwt.exceptions import InvalidTokenError
 from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import SQLModel, Session, Field, create_engine, select
-INDEXHTML = SysPath(__file__).resolve().parent / "view" / "index.html"
+INDEXHTML = SysPath(__file__).resolve().parent / "../view" / "index.html"
 SECRET_KEY = "c529450dbc9f5b614b0bb90c4f7e6a02e0a55a7df88881c61241fb5b704ccbb4"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -99,13 +99,13 @@ def create_hero(hero: HeroCreate, session: SessionDep):
     return db_hero
 
 
-@app.get('/heros/', response_model=list[Hero])
-def read_heros(session: SessionDep, offset: int = 0, limit: int = 100):
+@app.get('/heros/', response_model=list[HeroPublic])
+def read_heros(session: SessionDep, offset: int = 0, limit: Annotated[int, Query(le=100)] = 100):
     heros = session.exec(select(Hero).offset(offset).limit(limit)).all()
     return heros
 
 
-@app.get('/heros/{hero_id}', response_model=Hero)
+@app.get('/heros/{hero_id}', response_model=HeroPublic)
 def read_hero(hero_id: int, session: SessionDep):
     hero = session.get(Hero, hero_id)
     if not hero:
@@ -113,7 +113,20 @@ def read_hero(hero_id: int, session: SessionDep):
     return hero
 
 
-@app.delete('/heros/{hero_id}')
+@app.patch('/heros/{hero_id}', response_model=HeroPublic)
+def update_hero(hero_id: int, hero: HeroUpdate, session: SessionDep):
+    db_hero = session.get(Hero, hero_id)
+    if not db_hero:
+        raise HTTPException(status_code=404, detail="Hero not found")
+    hero_data = hero.model_dump(exclude_unset=True)
+    db_hero.sqlmodel_update(hero_data)
+    session.add(db_hero)
+    session.commit()
+    session.refresh(db_hero)
+    return db_hero
+
+
+@app.delete('/heros/{hero_id}',)
 def delete_hero(hero_id: int, session: SessionDep):
     hero = session.get(Hero, hero_id)
     if not hero:
