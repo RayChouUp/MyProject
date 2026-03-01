@@ -1,2 +1,0 @@
-notification for asd: some notificationnotification for admin@example.com: found query: dsad
-notification for sadasd: some notification
