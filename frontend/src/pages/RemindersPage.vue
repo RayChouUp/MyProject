@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import dayjs from 'dayjs'
 import { useReminderStore } from '../entities/reminder/store/useReminderStore'
-
+import { createRemind } from '../shared/api/modules/remind'
 const reminderStore = useReminderStore()
 
 const form = reactive({
@@ -25,6 +25,16 @@ const submitReminder = () => {
 
   form.title = ''
 }
+
+// createRemind({
+//   title: '产检',
+//   date: '2024-06-20',
+//   remind_time: '10:00',
+// }).then(() => {
+//   console.log('提醒创建成功')
+// }).catch((err) => {
+//   console.error('创建提醒失败', err)
+// })
 </script>
 
 <template>

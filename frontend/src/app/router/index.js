@@ -10,7 +10,8 @@ import ProfilePage from '../../pages/ProfilePage.vue'
 const routes = [
   {
     path: '/',
-    redirect: () => (localStorage.getItem('pregnancy_onboarding_done') === '1' ? '/home' : '/onboarding'),
+    // redirect: () => (localStorage.getItem('pregnancy_onboarding_done') === '1' ? '/home' : '/onboarding'),
+    redirect: '/home',
   },
   {
     path: '/onboarding',

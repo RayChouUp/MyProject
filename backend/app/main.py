@@ -10,14 +10,15 @@ import jwt
 import time
 from jwt.exceptions import InvalidTokenError
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import SQLModel, Session, Field, create_engine, select
 from .dependencies import get_token_header, get_query_token
-from .routers import users, items, notification
+from .routers import reminder
 from .internal import admin
 from fastapi.staticfiles import StaticFiles
 import uvicorn
+from .db import init_db
 INDEXHTML = SysPath(__file__).resolve().parent / "../view" / "index.html"
-FRONTEND_DIST = (SysPath(__file__).resolve().parent / "../../frontend/dist").resolve()
+FRONTEND_DIST = (SysPath(__file__).resolve().parent /
+                 "../../frontend/dist").resolve()
 FRONTEND_INDEX = FRONTEND_DIST / "index.html"
 FRONTEND_DEV_URL = "http://localhost:5173"
 # STATIC_DIR = SysPath(__file__).resolve().parent / "static"
@@ -41,8 +42,8 @@ app = FastAPI(
         "identifier": "MIT",
     },
 )
-app.include_router(users.router)
 
+app.include_router(reminder.router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -56,6 +57,11 @@ app.add_middleware(
 )
 
 # app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 
 @app.get('/')
