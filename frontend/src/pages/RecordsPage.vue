@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import dayjs from 'dayjs'
 import { useRecordStore } from '../entities/record/store/useRecordStore'
-
+import { createRecord, getRecords } from '../shared/api/modules/record'
 const recordStore = useRecordStore()
 
 const form = reactive({
@@ -18,7 +18,7 @@ const submitRecord = () => {
     return
   }
 
-  recordStore.addRecord({
+  createRecord({
     type: form.type,
     value: form.value,
     note: form.note,
@@ -38,7 +38,8 @@ const submitRecord = () => {
       <div class="mt-4 space-y-3">
         <label class="block">
           <span class="mb-1 block text-sm text-slate-600">记录类型</span>
-          <select v-model="form.type" class="h-11 w-full rounded-xl border border-slate-200 px-3 outline-none focus:border-pink-400">
+          <select v-model="form.type"
+            class="h-11 w-full rounded-xl border border-slate-200 px-3 outline-none focus:border-pink-400">
             <option>体重</option>
             <option>血压</option>
             <option>胎动</option>
@@ -48,39 +49,28 @@ const submitRecord = () => {
 
         <label class="block">
           <span class="mb-1 block text-sm text-slate-600">记录值</span>
-          <input
-            v-model="form.value"
-            type="text"
+          <input v-model="form.value" type="text"
             class="h-11 w-full rounded-xl border border-slate-200 px-3 outline-none focus:border-pink-400"
-            placeholder="例如：56.2kg / 120-80 / 8次"
-          />
+            placeholder="例如：56.2kg / 120-80 / 8次" />
         </label>
 
         <label class="block">
           <span class="mb-1 block text-sm text-slate-600">日期</span>
-          <input
-            v-model="form.date"
-            type="date"
-            class="h-11 w-full rounded-xl border border-slate-200 px-3 outline-none focus:border-pink-400"
-          />
+          <input v-model="form.date" type="date"
+            class="h-11 w-full rounded-xl border border-slate-200 px-3 outline-none focus:border-pink-400" />
         </label>
 
         <label class="block">
           <span class="mb-1 block text-sm text-slate-600">备注（可选）</span>
-          <textarea
-            v-model="form.note"
-            rows="3"
+          <textarea v-model="form.note" rows="3"
             class="w-full rounded-xl border border-slate-200 px-3 py-2 outline-none focus:border-pink-400"
-            placeholder="补充当日状态"
-          />
+            placeholder="补充当日状态" />
         </label>
       </div>
 
-      <button
-        type="button"
+      <button type="button"
         class="mt-4 h-11 w-full rounded-xl bg-pink-500 text-sm font-semibold text-white transition hover:bg-pink-600"
-        @click="submitRecord"
-      >
+        @click="submitRecord">
         保存记录
       </button>
     </section>
